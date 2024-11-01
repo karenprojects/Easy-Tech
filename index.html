@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login e Agendamentos</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #495057;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        input, select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            transition: border 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .home-message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #343a40;
+        }
+
+        .option-button {
+            background-color: #28a745;
+        }
+
+        .option-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="loginContainer">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Usuário" required>
+        <input type="password" id="password" placeholder="Senha" required>
+        <button onclick="login()">Entrar</button>
+    </div>
+
+    <div class="container hidden" id="homeContainer">
+        <h1>Bem-vindo à Home!</h1>
+        <p class="home-message">Você está logado.</p>
+        <button class="option-button" onclick="navigateTo('Agendamentos')">Agendamentos</button>
+        <button class="option-button" onclick="navigateTo('Token')">Token</button>
+        <button class="option-button" onclick="navigateTo('Carteira Digital')">Carteira Digital</button>
+    </div>
+
+    <div class="container hidden" id="agendamentosContainer">
+        <h1>Agendamentos</h1>
+        <p class="home-message">Escolha uma opção:</p>
+        <button class="option-button" onclick="selectOption('Consultas')">Consultas</button>
+        <button class="option-button" onclick="selectOption('Exames')">Exames</button>
+        <button class="option-button" onclick="goBackToHome()">Voltar</button>
+    </div>
+
+    <div class="container hidden" id="consultasContainer">
+        <h1>Consultas</h1>
+        <button class="option-button" onclick="alert('Navegando para Telemedicina')">Telemedicina</button>
+        <button class="option-button" onclick="alert('Navegando para Clínicas Próprias')">Clínicas Próprias</button>
+        <button class="option-button" onclick="showClinicasParceiras()">Clínicas Parceiras</button>
+        <button class="back-button" onclick="goBackToAgendamentos()">Voltar</button>
+    </div>
+
+    <div class="container hidden" id="clinicasParceirasContainer">
+        <h1>Clínicas Parceiras</h1>
+        <label for="data">Escolha a Data:</label>
+        <input type="date" id="data" required>
+        <label for="hora">Escolha o Horário:</label>
+        <input type="time" id="hora" required>
+        <button class="option-button" onclick="confirmAgendamento()">Confirmar Agendamento</button>
+        <button class="back-button" onclick="goBackToConsultas()">Voltar</button>
+    </div>
+
+    <div class="container hidden" id="examesContainer">
+        <h1>Exames</h1>
+        <button class="option-button" onclick="alert('Navegando para Clínicas Próprias')">Clínicas Próprias</button>
+        <button class="option-button" onclick="alert('Navegando para Clínicas Parceiras')">Clínicas Parceiras</button>
+        <button class="back-button" onclick="goBackToAgendamentos()">Voltar</button>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username && password) {
+                document.getElementById('loginContainer').classList.add('hidden');
+                document.getElementById('homeContainer').classList.remove('hidden');
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        }
+
+        function navigateTo(section) {
+            if (section === 'Agendamentos') {
+                document.getElementById('homeContainer').classList.add('hidden');
+                document.getElementById('agendamentosContainer').classList.remove('hidden');
+            } else {
+                alert(`Navegando para: ${section}`);
+            }
+        }
+
+        function selectOption(option) {
+            if (option === 'Consultas') {
+                document.getElementById('agendamentosContainer').classList.add('hidden');
+                document.getElementById('consultasContainer').classList.remove('hidden');
+            } else if (option === 'Exames') {
+                document.getElementById('agendamentosContainer').classList.add('hidden');
+                document.getElementById('examesContainer').classList.remove('hidden');
+            }
+        }
+
+        function showClinicasParceiras() {
+            document.getElementById('consultasContainer').classList.add('hidden');
+            document.getElementById('clinicasParceirasContainer').classList.remove('hidden');
+        }
+
+        function confirmAgendamento() {
+            const data = document.getElementById('data').value;
+            const hora = document.getElementById('hora').value;
+
+            if (data && hora) {
+                alert(`Agendamento confirmado para ${data} às ${hora}.`);
+                goBackToConsultas();
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        }
+
+        function goBackToHome() {
+            document.getElementById('agendamentosContainer').classList.add('hidden');
+            document.getElementById('homeContainer').classList.remove('hidden');
+        }
+
+        function goBackToAgendamentos() {
+            document.getElementById('consultasContainer').classList.add('hidden');
+            document.getElementById('examesContainer').classList.add('hidden');
+            document.getElementById('clinicasParceirasContainer').classList.add('hidden');
+            document.getElementById('agendamentosContainer').classList.remove('hidden');
+        }
+
+        function goBackToConsultas() {
+            document.getElementById('clinicasParceirasContainer').classList.add('hidden');
+            document.getElementById('consultasContainer').classList.remove('hidden');
+        }
+    </script>
+
+</body>
+</html>
