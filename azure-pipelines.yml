@@ -1,0 +1,12 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'  # Muda para Windows
+
+steps:
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(build.sourcesDirectory)'
+    includeRootFolder: false
+- task: PublishBuildArtifacts@1
